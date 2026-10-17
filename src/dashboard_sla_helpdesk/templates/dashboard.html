@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard SLA{% endblock %}
+
+{% block content %}
+<h2 style="margin-bottom: 1rem;">Dashboard de SLA</h2>
+
+<div class="kpi-grid">
+    <div class="kpi-card">
+        <h3>Total de tickets</h3>
+        <div class="value">{{ kpis.total_tickets }}</div>
+    </div>
+    <div class="kpi-card">
+        <h3>Tickets abertos</h3>
+        <div class="value">{{ kpis.tickets_abertos }}</div>
+    </div>
+    <div class="kpi-card">
+        <h3>Resolvidos</h3>
+        <div class="value">{{ kpis.tickets_resolvidos }}</div>
+    </div>
+    <div class="kpi-card">
+        <h3>Fechados</h3>
+        <div class="value">{{ kpis.tickets_fechados }}</div>
+    </div>
+    <div class="kpi-card">
+        <h3>Tempo medio de resolucao</h3>
+        <div class="value warn">{{ "%.2f"|format(kpis.tempo_medio_resolucao_horas) }} h</div>
+        <div class="sla-meta">Media entre tickets resolvidos/fechados</div>
+    </div>
+    <div class="kpi-card">
+        <h3>Taxa de cumprimento SLA</h3>
+        <div class="value sla">{{ "%.2f"|format(kpis.taxa_cumprimento_sla) }}%</div>
+        <div class="sla-meta">Tickets resolvidos dentro do prazo / total resolvidos</div>
+    </div>
+</div>
+
+<h3 style="margin-bottom: 0.5rem;">SLA por severidade</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Severidade</th>
+            <th>SLA (horas)</th>
+            <th>Total</th>
+            <th>Cumpridos</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for sev, data in kpis.sla_por_severidade.items() %}
+        <tr>
+            <td><span class="badge badge-{{ sev }}">{{ sev }}</span></td>
+            <td>{{ data.sla_horas }} h</td>
+            <td>{{ data.total }}</td>
+            <td>{{ data.cumpridos }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h3 style="margin-bottom: 0.5rem; margin-top: 2rem;">Tickets recentes</h3>
+{% if tickets %}
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Titulo</th>
+            <th>Severidade</th>
+            <th>Status</th>
+            <th>Criado em</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for t in tickets %}
+        <tr>
+            <td>{{ t.id }}</td>
+            <td>{{ t.title }}</td>
+            <td><span class="badge badge-{{ t.severity }}">{{ t.severity }}</span></td>
+            <td><span class="badge badge-{{ t.status }}">{{ t.status }}</span></td>
+            <td>{{ t.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div class="empty">Nenhum ticket cadastrado.</div>
+{% endif %}
+
+<p style="margin-top: 1rem;">
+    <a href="{{ url_for('helpdesk.tickets_list') }}" class="button">Ver fila completa</a>
+    <a href="{{ url_for('helpdesk.new_ticket') }}" class="button">Criar ticket</a>
+</p>
+{% endblock %}
