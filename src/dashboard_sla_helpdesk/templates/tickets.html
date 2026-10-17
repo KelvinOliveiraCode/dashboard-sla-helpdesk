@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Fila de tickets{% endblock %}
+
+{% block content %}
+<h2 style="margin-bottom: 1rem;">Fila de tickets</h2>
+
+<div class="filters">
+    <form method="get" action="{{ url_for('helpdesk.tickets_list') }}" style="margin: 0;">
+        <select name="status">
+            <option value="">Todos os status</option>
+            <option value="open"{% if status == 'open' %} selected{% endif %}>Aberto</option>
+            <option value="in_progress"{% if status == 'in_progress' %} selected{% endif %}>Em andamento</option>
+            <option value="resolved"{% if status == 'resolved' %} selected{% endif %}>Resolvido</option>
+            <option value="closed"{% if status == 'closed' %} selected{% endif %}>Fechado</option>
+        </select>
+        <select name="severity">
+            <option value="">Todas as severidades</option>
+            <option value="critical"{% if severity == 'critical' %} selected{% endif %}>Critico</option>
+            <option value="high"{% if severity == 'high' %} selected{% endif %}>Alta</option>
+            <option value="medium"{% if severity == 'medium' %} selected{% endif %}>Media</option>
+            <option value="low"{% if severity == 'low' %} selected{% endif %}>Baixa</option>
+        </select>
+        <button type="submit">Filtrar</button>
+        <a href="{{ url_for('helpdesk.tickets_list') }}" class="button secondary">Limpar</a>
+    </form>
+</div>
+
+{% if tickets %}
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Titulo</th>
+            <th>Descricao</th>
+            <th>Severidade</th>
+            <th>Status</th>
+            <th>Criado em</th>
+            <th>SLA</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for t in tickets %}
+        <tr>
+            <td>{{ t.id }}</td>
+            <td>{{ t.title }}</td>
+            <td>{{ t.description[:60] }}{% if t.description|length > 60 %}...{% endif %}</td>
+            <td><span class="badge badge-{{ t.severity }}">{{ t.severity }}</span></td>
+            <td><span class="badge badge-{{ t.status }}">{{ t.status }}</span></td>
+            <td>{{ t.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+            <td>{{ t.sla_hours }} h</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div class="empty">Nenhum ticket encontrado.</div>
+{% endif %}
+
+<p style="margin-top: 1.5rem;">
+    <a href="{{ url_for('helpdesk.new_ticket') }}" class="button">+ Novo ticket</a>
+    <a href="{{ url_for('helpdesk.dashboard') }}" class="button secondary">Voltar ao dashboard</a>
+</p>
+{% endblock %}
