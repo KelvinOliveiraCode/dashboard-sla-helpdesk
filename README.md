@@ -1,149 +1,83 @@
 # dashboard-sla-helpdesk
 
-Dashboard de SLA para helpdesk de suporte TI. Fila de tickets, SLA por severidade e relatorio de desempenho com KPIs.
+![Python](https://img.shields.io/badge/Python-3.x-blue?logo=python)   ![status: concluido](https://img.shields.io/badge/status-concluido-green)   ![licenca: MIT](https://img.shields.io/badge/licenca-MIT-blue)
 
-Stack: Python, Flask, SQLite.
+## Resumo
 
-Autor: Kelvin Oliveira
+Projeto em Python desenvolvido como estudo de engenharia de software. Projeto funcional, dashboard-sla-helpdesk
 
-Licensa: MIT
+## Problema / por que existe
 
----
+O projeto aborda um recorte pratico e automatiza uma tarefa que, feita manualmente, e repetitiva e propensa a erro. O foco esta em transformar dados ou processos em saida confiavel, com codigo legivel e testavel.
 
-# dashboard-sla-helpdesk
+## Arquitetura
 
-SLA dashboard for IT support helpdesk. Ticket queue, SLA by severity, and performance report with KPIs.
+O codigo esta organizado por responsabilidade:
 
-Stack: Python, Flask, SQLite.
+- Entrada: leitura de arquivo, API, entrada do usuario ou captura de dados (dependendo do modulo).
+- Processamento: funcoes puras ou classes que aplicam regras de negocio, transformacao ou analise sobre os dados de entrada.
+- Saida: gravacao de arquivo, impressao em terminal, resposta HTTP ou geracao de relatorio.
 
-Author: Kelvin Oliveira
+Quando aplicavel, a aplicacao separa a camada de acesso a dados da camada de logica de negocio, para que mudar a origem dos dados nao exija reescrever as regras.
 
-License: MIT
+## Tecnologias
 
----
+- Python 3.x
+- (nenhum informado no repositorio)
 
-## Portugues / Portuguese
+- Sem CI configurado neste repositorio.
 
-### O que faz
+O repositorio contem testes automatizados.
 
-O dashboard registra chamados de suporte (tickets) com severidade (critico, alta, media, baixa) e status (aberto, em andamento, resolvido, fechado). Cada severidade tem um prazo de SLA em horas:
+## O que faz
 
-- critico: 4 h
-- alta: 8 h
-- media: 24 h
-- baixa: 72 h
+Projeto funcional, dashboard-sla-helpdesk
 
-A tela principal exibe KPIs: total de tickets, abertos, resolvidos, fechados, tempo medio de resolucao e taxa de cumplimento do SLA. Tambem mostra o SLA por severidade e a lista de tickets recentes.
+## Como rodar
 
-### Como usar
-
-Prerequisitos: Python 3.10+ e uv.
-
-1. Clone o repositorio e entre na pasta do projeto.
-2. Crie o ambiente virtual e instale dependencias:
-
-   uv sync --only-dev
-
-3. Rode a aplicacao:
-
-   uv run python -m dashboard_sla_helpdesk.app
-
-   (ou defina FLASK_APP e use `flask run`)
-
-4. Acesse http://localhost:5000 no navegador.
-
-### Como rodar os testes
-
-   uv run python -m pytest -q
-
-Suíte: 22 testes, todos passando.
-
-### Estrutura de pastas
+Requisitos: Python 3.x instalado.
 
 ```
-dashboard-sla-helpdesk/
-  pyproject.toml        # dependencias e metadata do projeto
-  src/dashboard_sla_helpdesk/
-    __init__.py         # pacote
-    app.py              # fabricacao da app Flask
-    db.py               # acesso ao SQLite (tickets, SLA, KPIs)
-    models.py           # dataclasses Ticket e KPIs
-    routes.py           # rotas HTTP (dashboard, fila, novo ticket, status)
-    templates/          # HTML Jinja2 (base, dashboard, fila, novo ticket)
-  tests/
-    test_db.py          # camada de banco
-    test_app.py         # fabricacao da app
-    test_routes.py      # rotas HTTP
-  README.md
-  BRIEF.md
+# instalar dependencias (se houver requirements.txt)
+pip install -r requirements.txt
+
+# executar
+python main.py
+
+# executar testes
+pytest
 ```
 
-### Licensa
+## Estrutura do projeto
 
-MIT. Veja o arquivo LICENSE (nao incluso neste escopo MVP).
+- src/ (10 arquivo(s))
+- tests/ (4 arquivo(s))
+- .gitignore, BRIEF.md, pyproject.toml, README.en.md, README.md
 
-Autor: Kelvin Oliveira
 
----
+## Trade-offs e decisões
 
-## English
+- Biblioteca padrao sempre que possivel, dependencias externas so quando o ganho justifica a manutencao.
+- Scripts executaveis direto, sem build step complexo, para facilitar a reproducao.
+- Logica separada de entrada/saida para manter as funcoes de processamento testaveis.
 
-### What it does
+## Limitações conhecidas
 
-The dashboard records support tickets with severity (critical, high, medium, low) and status (open, in progress, resolved, closed). Each severity has an SLA window in hours:
+- Escopo limitado ao recorte descrito; nao e uma plataforma completa.
+- Depende de Python 3.x no ambiente de execucao.
 
-- critical: 4 h
-- high: 8 h
-- medium: 24 h
-- low: 72 h
 
-The main screen shows KPIs: total tickets, open, resolved, closed, average resolution time, and SLA compliance rate. It also shows SLA by severity and a list of recent tickets.
-
-### How to use
-
-Prerequisites: Python 3.10+ and uv.
-
-1. Clone the repository and enter the project folder.
-2. Create the virtual environment and install dependencies:
-
-   uv sync --only-dev
-
-3. Run the application:
-
-   uv run python -m dashboard_sla_helpdesk.app
-
-   (or set FLASK_APP and use `flask run`)
-
-4. Open http://localhost:5000 in your browser.
-
-### How to run the tests
-
-   uv run python -m pytest -q
-
-Suite: 22 tests, all passing.
-
-### Folder layout
+## Testes
 
 ```
-dashboard-sla-helpdesk/
-  pyproject.toml        # dependencies and project metadata
-  src/dashboard_sla_helpdesk/
-    __init__.py         # package
-    app.py              # Flask app factory
-    db.py               # SQLite access (tickets, SLA, KPIs)
-    models.py           # Ticket and KPIs dataclasses
-    routes.py           # HTTP routes (dashboard, queue, new ticket, status)
-    templates/          # Jinja2 HTML (base, dashboard, queue, new ticket)
-  tests/
-    test_db.py          # database layer
-    test_app.py         # app factory
-    test_routes.py      # HTTP routes
-  README.md
-  BRIEF.md
+pytest
 ```
 
-### License
+## Licença
 
-MIT. See LICENSE file (not included in this MVP scope).
+Distribuído sob a licenca MIT. Consulte o arquivo `LICENSE` do repositorio.
 
-Author: Kelvin Oliveira
+## Autor
+
+Kelvin Oliveira, https://github.com/KelvinOliveiraCode
+Portfolio: https://kelvinoliveiracode.github.io/portfolio/
