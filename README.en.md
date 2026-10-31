@@ -1,118 +1,89 @@
 # dashboard-sla-helpdesk
 
-<div align="center">
-
 **English** · [Português (Brasil)](README.md)
 
-</div>
-
-[![Python 3](https://img.shields.io/badge/Python-3.x-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/) [![scikit-learn](https://img.shields.io/badge/scikit--learn-F7931E?style=flat-square&logo=scikit-learn)](https://scikit-learn.org/) [![pandas](https://img.shields.io/badge/pandas-150458?style=flat-square&logo=pandas)](https://pandas.pydata.org/) [![pytest](https://img.shields.io/badge/pytest-0A9EDC?style=flat-square&logo=pytest)](https://docs.pytest.org/) [![MIT License](https://img.shields.io/badge/License-MIT-f4c430?style=flat-square)](LICENSE)
-
-### Projeto funcional ,  dashboard-sla-helpdesk
-
----
+[![Python 3](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=flat-square&logo=python&logoColor=white)](#) [![Flask](https://img.shields.io/badge/Flask-3.x-000000?style=flat-square&logo=flask)](#) [![pytest](https://img.shields.io/badge/pytest-22%20tests-0A9EDC?style=flat-square&logo=pytest)](#) [![MIT License](https://img.shields.io/badge/License-MIT-f4c430?style=flat-square)](LICENSE)
 
 ## What it is
 
-Projeto funcional ,  dashboard-sla-helpdesk
+**A small SLA dashboard for a helpdesk**: it generates synthetic tickets, stores them in SQLite, computes SLA per severity and exposes a Flask API to query tickets and whether they were handled in time. It is an educational backend/API lab.
 
----
+## Status
 
-## Quick Start
+An educational lab, working and tested (22 tests).
 
-```bash
-# Clone and enter
-git clone https://github.com/KelvinOliveiraCode/<repo>.git
-cd <repo>
+## Features
 
-# Install dependencies
-# No requirements.txt detected
+- **Data model** (`models.py`): `criar_ticket`, `atualizar_status`, `listar_tickets`, `obter_ticket`.
+- **SLA calculation** (`sla.py`): `compute_sla_hours(severity)` and `is_within_sla(created, resolved, severity)`.
+- **SQLite DB** (`db.py`): `get_connection`, `init_db`.
+- **Flask API** (`app.py`): `create_app(db_path)`; create and query tickets.
+- **Synthetic data generation**: populates the database for the dashboard.
 
-# Run the project
-python main.py
+## Architecture
 
-# Run tests
-pytest
+A `dashboard_sla_helpdesk` package with `db` (SQLite), `models` (ticket operations), `sla` (calculation) and `app` (Flask API), plus synthetic data in `data/`.
+
+```mermaid
+flowchart LR
+    DATA[synthetic data] --> DB[(SQLite)]
+    API[app.py - Flask] --> DB
+    MOD[models.py] --> DB
+    SLA[sla.py - hours/status] --> MOD
 ```
 
-## How it works
+## Stack
 
-Estrutura limpa e modular com separação de responsabilidades.
+- Python ≥ 3.10
+- Flask ≥ 3.0 (only dependency; SQLite and the rest via stdlib)
+- pytest (dev)
 
----
+## Repository layout
 
-## Capabilities
+```
+dashboard-sla-helpdesk/
+├── pyproject.toml · BRIEF.md
+├── src/dashboard_sla_helpdesk/
+│   ├── db.py · models.py · sla.py · app.py
+├── data/             # synthetic data
+├── tests/            # 22 tests
+└── LICENSE           # MIT
+```
 
-| Capacidade | Descrição |
-|------------|-------------|
-| Carregamento de Dados | Auto-download do TensorFlow creditcard.csv (284k transações) com cache local |
-| EDA e Visualização | Distribuição de classes, histogramas de Amount, heatmaps de correlação (matplotlib/seaborn) |
-| Pré-processamento | RobustScaler em Amount/Time, split estratificado, remoção de duplicatas |
-| Balanceamento | SMOTE oversampling (fallback: class_weight="balanced") |
-| Modelagem | LogisticRegression, RandomForest, ExtraTrees com RandomizedSearchCV (StratifiedKFold) |
-| Métricas | Accuracy, Precision, Recall, F1, ROC AUC, Specificity, Confusion Matrix |
-| Seleção | Score ponderado: Recall 40% + F1 30% + Precision 20% + Accuracy 10% |
-| Persistência | Serialização joblib para modelo, scaler e resultados completos |
+## Prerequisites and installation
 
+```bash
+pip install -e .
+```
 
----
+## How to run
 
+```bash
+python -m dashboard_sla_helpdesk
+# starts the Flask API with the dashboard
+```
 
+## Tests and quality
 
----
+```bash
+PYTHONPATH=src python -m pytest tests/
+# 22 passed
+```
 
-## FAQ
+## Technical decisions and trade-offs
 
-<details>
-<summary><strong>What is this project?</strong></summary>
+- SQLite + Flask: a light stack with no external service; suited to a lab.
+- SLA by severity: simple, testable rules instead of ML.
 
-A Python study/project demonstrating core concepts.
+## Known limitations
 
-</details>
+- Synthetic data (not from a real helpdesk).
+- SLA computed by severity with fixed rules; no per-contract/dynamic configuration.
 
-<details>
-<summary><strong>How do I run it?</strong></summary>
+## Development process
 
-See [Quick Start](#quick-start) for copy-paste commands.
+An individual project by Kelvin Oliveira, built with orchestrated AI agents and reviewed by the author.
 
-</details>
+## License and author
 
-<details>
-<summary><strong>Are there tests?</strong></summary>
-
-No automated tests in this repository.
-
-</details>
-
-<details>
-<summary><strong>Can I use this in production?</strong></summary>
-
-This is a **study/portfolio project**. Review and harden (auth, persistence, monitoring, etc.) before production use.
-
-</details>
-
-
-
----
-
-## Documentation
-
-- **Source Code** ,  Browse the `src/` directory for implementation details
-- **API Reference** ,  Inline docstrings + type hints
-- **Architecture Diagram** ,  See [architecture.mermaid](docs/architecture.mermaid) (if present)
-- **Changelog** ,  [CHANGELOG.md](CHANGELOG.md) (if present)
-- **Contributing** ,  [CONTRIBUTING.md](CONTRIBUTING.md) (if present)
-
-## License
-
-[MIT](LICENSE) ,  Kelvin Oliveira
-
----
-
-<div align="center">
-
-**Built with** · Python 3 + scikit-learn + pandas
-
-**Author** · [Kelvin Oliveira](https://github.com/KelvinOliveiraCode) · [Portfolio](https://kelvinoliveiracode.github.io/portfolio/)
-
-</div>
+MIT — Copyright (c) 2026 Kelvin Rebelo de Oliveira. Author: [Kelvin Oliveira](https://github.com/KelvinOliveiraCode) · [Portfolio](https://kelvinoliveiracode.github.io/portfolio/)
